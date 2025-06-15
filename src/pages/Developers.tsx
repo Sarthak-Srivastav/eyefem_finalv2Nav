@@ -1,4 +1,6 @@
-
+import React from 'react';
+import { MainLayout } from '@/components';
+import Footer from "@/components/Footer";
 import { Mail, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTypewriter } from 'react-simple-typewriter';
@@ -6,7 +8,7 @@ import PageTransition from "@/components/PageTransition";
 import { Card, CardContent } from "@/components/ui/card";
 import DevelopersNavbar from "@/components/DevelopersNavbar";
 
-const Developers = () => {
+const Developers: React.FC = () => {
   const [text] = useTypewriter({
     words: ['Meet Our Development Team', 'The Minds Behind Eyefem', 'Our Talented Team'],
     loop: true,
@@ -39,11 +41,10 @@ const Developers = () => {
   }];
 
   return (
-    <PageTransition>
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-        <DevelopersNavbar />
-        <div className="pt-24 pb-20">
-          <div className="container mx-auto px-4">
+    <MainLayout>
+      <div className="bg-gradient-to-b from-gray-50 to-gray-100">
+        <section className="py-10 sm:py-12 md:py-16 px-4">
+          <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-10 sm:mb-12 md:mb-16" data-aos="fade-up">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60 min-h-[2.5em] sm:min-h-[2em] md:min-h-[1.8em] lg:min-h-[1.6em]">
                 {text}
@@ -96,16 +97,11 @@ const Developers = () => {
                 </Card>
               ))}
             </div>
-
-            <div className="text-center mt-12">
-              <Link to="/" className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 transition-colors">
-                <span>Back to Home</span>
-              </Link>
-            </div>
           </div>
-        </div>
+        </section>
       </div>
-    </PageTransition>
+      <Footer />
+    </MainLayout>
   );
 };
 

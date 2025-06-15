@@ -9,13 +9,12 @@ interface EyeCareLayoutProps {
 
 const EyeCareLayout = ({ children }: EyeCareLayoutProps) => {
   return (
-    <PageTransition>
       <div className="min-h-screen flex flex-col">
         <EyeCareNavbar />
-        <main className="flex-grow w-full pt-16">
-          <div className="w-full mx-auto">
+      <main className="flex-1 pt-20">
+        <PageTransition>
             {children}
-          </div>
+        </PageTransition>
         </main>
         <Footer />
         
@@ -24,7 +23,6 @@ const EyeCareLayout = ({ children }: EyeCareLayoutProps) => {
           <div className="elfsight-app-a33bc770-938d-4a29-a90b-1d1514e16817" data-elfsight-app-lazy></div>
         </div>
       </div>
-    </PageTransition>
   );
 };
 

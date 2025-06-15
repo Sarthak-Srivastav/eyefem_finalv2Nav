@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-const EyeCareNavbar = () => {
+const MainNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
@@ -25,15 +25,22 @@ const EyeCareNavbar = () => {
   }, []);
 
   const navLinks = [
-    { path: "/eyecare", label: "Overview" },
-    // { path: "/eyecare/conditions", label: "Conditions & Treatments" },
+    // { path: "/", label: "Home" },
+    // { path: "/specialties", label: "Our Specialties" },
+    { path: "/eyecare", label: "Eye Care" },
+    { path: "/gynecology", label: "Gynecology" },
     { path: "/eyecare/doctor", label: "Dr. Sanjeev Lehri" },
-    { path: "/eyecare/appointment", label: "Book Appointment" },
+    { path: "/gynecology/doctor", label: "Dr. Nisha Bhatnagar" },
+    { path: "/gallery", label: "Gallery", hideOn: "/gallery" },
+    // { path: "/developers", label: "Developers", hideOn: "/developers" }
   ];
+
+  // Filter out links that should be hidden on current page
+  const visibleLinks = navLinks.filter(link => link.hideOn !== location.pathname);
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 bg-white py-3 ${
+      className={`fixed top-0 left-0 w-full z-50 bg-white py-3 transition-all duration-300 ${
         isScrolled ? 'shadow-md' : 'shadow-sm'
       }`}
     >
@@ -54,68 +61,55 @@ const EyeCareNavbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
+            {visibleLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`transition-colors hover:text-eyecare ${
+                className={`transition-colors hover:text-primary ${
                   location.pathname === link.path
-                    ? "text-eyecare font-semibold"
+                    ? "text-primary font-semibold"
                     : "text-gray-600"
                 }`}
               >
                 {link.label}
               </Link>
             ))}
-            <Link
-              to="/"
-              className="text-gray-600 transition-colors hover:text-eyecare"
-            >
-              Home
-            </Link>
           </div>
 
           {/* Mobile Nav Toggle */}
           <button
             onClick={toggleMenu}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-eyecare"
+            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-      </div>
-
-      {/* Mobile Nav Menu */}
-      {isOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t">
-          <div className="container mx-auto px-4 py-4 space-y-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                  className={`block py-2 px-3 rounded-lg transition-colors hover:bg-gray-50 ${
-                  location.pathname === link.path
-                      ? "text-eyecare font-semibold bg-gray-50"
-                    : "text-gray-600"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Link
-              to="/"
-                className="block py-2 px-3 rounded-lg text-gray-600 transition-colors hover:bg-gray-50"
-              onClick={() => setIsOpen(false)}
-            >
-              Home
-            </Link>
-          </div>
         </div>
-      )}
+
+        {/* Mobile Nav Menu */}
+        {isOpen && (
+          <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t">
+            <div className="container mx-auto px-4 py-4 space-y-4">
+              {visibleLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`block py-2 px-3 rounded-lg transition-colors hover:bg-gray-50 ${
+                    location.pathname === link.path
+                      ? "text-primary font-semibold bg-gray-50"
+                      : "text-gray-600"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
 };
 
-export default EyeCareNavbar;
+export default MainNavbar; 

@@ -1,104 +1,72 @@
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Check,
-  CheckCircle,
   Shield,
   Beaker,
   Heart,
-  Menu,
-  X,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import PageTransition from "@/components/PageTransition";
-import HeroShape from "@/components/HeroShape";
-import Footer from "@/components/Footer";
-import { usePageContent } from "@/hooks/usePageContent";
-import { useServiceCards } from "@/hooks/useServiceCards";
-import { useDepartments } from "@/hooks/useDepartments";
-import { useWhyChooseUs } from "@/hooks/useWhyChooseUs";
-import { useState, useEffect, useRef } from "react";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import PageTransition from '@/components/PageTransition';
+import HeroShape from '@/components/HeroShape';
+import Footer from '@/components/Footer';
+import { usePageContent } from '@/hooks/usePageContent';
+import { useServiceCards } from '@/hooks/useServiceCards';
+import { useDepartments } from '@/hooks/useDepartments';
+import { useWhyChooseUs } from '@/hooks/useWhyChooseUs';
+import { MainLayout } from '@/components';
 
 const LandingPage = () => {
   const [hoverEyeCare, setHoverEyeCare] = useState(false);
   const [hoverGynecology, setHoverGynecology] = useState(false);
-  // For mobile menu toggle
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // For responsive behaviors based on screen size
   const [isMobile, setIsMobile] = useState(false);
   const specialtiesRef = useRef<HTMLDivElement>(null);
 
-  // Use the hooks for dynamic data
   const { departments, departmentServices, isLoading } = useDepartments();
-
-  // Get departments data after initialization
   const eyeCareDept = departments.find((d) =>
-    d.department.toLowerCase().includes("eye")
+    d.department.toLowerCase().includes('eye')
   );
   const gynecologyDept = departments.find((d) =>
-    d.department.toLowerCase().includes("gyn")
+    d.department.toLowerCase().includes('gyn')
   );
-  // const { benefitCards, isLoading: whyChooseUsLoading } = useWhyChooseUs();
-  // Get services for each department
   const eyeCareServices =
-    departmentServices[eyeCareDept?.department || "Eye Care"] || [];
+    departmentServices[eyeCareDept?.department || 'Eye Care'] || [];
   const gynecologyServices =
-    departmentServices[gynecologyDept?.department || "Gynecology"] || [];
-  // Update mobile status based on window size
+    departmentServices[gynecologyDept?.department || 'Gynecology'] || [];
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
     checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    // Initialize AOS
+    window.addEventListener('resize', checkMobile);
     const initializeAOS = async () => {
-      const AOS = (await import("aos")).default;
+      const AOS = (await import('aos')).default;
       AOS.init({
         duration: 800,
         once: true,
-        easing: "ease-in-out",
+        easing: 'ease-in-out',
         mirror: false,
       });
     };
-
     initializeAOS();
-
-    // Auto-scroll to specialties section after 4 seconds
     const scrollTimer = setTimeout(() => {
       if (specialtiesRef.current) {
-        specialtiesRef.current.scrollIntoView({ behavior: "smooth" });
+        specialtiesRef.current.scrollIntoView({ behavior: 'smooth' });
       }
     }, 4000);
-
-    // Cleanup event listener and timer
     return () => {
-      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener('resize', checkMobile);
       clearTimeout(scrollTimer);
     };
   }, []);
 
-  // Handle mobile menu close when a link is clicked
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
-
-  // Fetch dynamic content for the hero section
-  const { content, isLoading: contentLoading } = usePageContent("home_hero_section");
-
-  // Default content as fallback
-  const defaultHeading = "Specialized Healthcare for Your Unique Needs";
+  const { content, isLoading: contentLoading } = usePageContent('home_hero_section');
+  const defaultHeading = 'Specialized Healthcare for Your Unique Needs';
   const defaultDescription =
     "Experience world-class care in Eye Health and Women's Health with our team of specialists at Eyefem Healthcare.";
-
-  // Add this hook call
-  const { cards: serviceCards, isLoading: serviceCardsLoading } =
-    useServiceCards();
-
-  // Add this hook call near your other hooks
+  const { cards: serviceCards, isLoading: serviceCardsLoading } = useServiceCards();
   const {
     sectionContent: whyChooseUsSection,
     benefitCards,
@@ -106,144 +74,9 @@ const LandingPage = () => {
   } = useWhyChooseUs();
 
   return (
-    <PageTransition>
-      <div className="min-h-screen flex flex-col">
-        <header
-          className="bg-white shadow-sm fixed top-0 left-0 right-0 z-50"
-          data-aos="fade-down"
-        >
-          <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <div className="h-14 w-auto flex items-center">
-                <img
-                  src="/eyefemm_pic_uploads/6c43213d-6d60-4790-b8ff-d662e634ee59.png"
-                  alt="EyeFem Clinic"
-                  className="h-16 w-auto object-contain"
-                />
-              </div>
-            </Link>
-
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden flex items-center"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6 text-gray-800" />
-              ) : (
-                <Menu className="h-6 w-6 text-gray-800" />
-              )}
-            </button>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6">
-              {/* <Link to="/" className="transition-colors text-white/0">Home</Link> */}
-              {/* Temporarily hidden per client request
-            <Link to="/specialties" className="text-gray-800 hover:text-primary transition-colors">Our Specialties</Link>
-            */}
-              <Link
-                to="/eyecare"
-                className="text-gray-800 hover:text-primary transition-colors"
-              >
-                Eye Care
-              </Link>
-              <Link
-                to="/gynecology"
-                className="text-gray-800 hover:text-primary transition-colors"
-              >
-                Gynecology
-              </Link>
-              <Link
-                to="/eyecare/doctor"
-                className="text-gray-800 hover:text-primary transition-colors"
-              >
-                Dr. Sanjeev Lehri
-              </Link>
-              <Link
-                to="/gynecology/doctor"
-                className="text-gray-800 hover:text-primary transition-colors"
-              >
-                Dr. Nisha Bhatnagar
-              </Link>
-              <Link
-                to="/gallery"
-                className="text-gray-800 hover:text-primary transition-colors"
-              >
-                Gallery
-              </Link>
-              {/* Get Started button temporarily hidden
-            <Link to="/specialties">
-              <Button className="rounded-full px-5 py-2 bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-            </Link>
-            */}
-            </div>
-          </div>
-
-          {/* Mobile Navigation Menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden bg-white shadow-md py-4 px-6 absolute w-full">
-              <nav className="flex flex-col space-y-4">
-                {/* <Link
-                  to="/"
-                  className="text-gray-800 hover:text-primary transition-colors py-2"
-                  onClick={closeMobileMenu}
-                >
-                  Home
-                </Link> */}
-                {/* Temporarily hidden per client request
-              <Link to="/specialties" className="text-gray-800 hover:text-primary transition-colors py-2" onClick={closeMobileMenu}>
-              Our Specialties
-              </Link>
-              */}
-                <Link
-                  to="/eyecare"
-                  className="text-gray-800 hover:text-primary transition-colors py-2"
-                  onClick={closeMobileMenu}
-                >
-                  Eye Care
-                </Link>
-                <Link
-                  to="/gynecology"
-                  className="text-gray-800 hover:text-primary transition-colors py-2"
-                  onClick={closeMobileMenu}
-                >
-                  Gynecology
-                </Link>
-                <Link
-                  to="/eyecare/doctor"
-                  className="text-gray-800 hover:text-primary transition-colors py-2"
-                  onClick={closeMobileMenu}
-                >
-                  Dr. Sanjeev Lehri
-                </Link>
-                <Link
-                  to="/gynecology/doctor"
-                  className="text-gray-800 hover:text-primary transition-colors py-2"
-                  onClick={closeMobileMenu}
-                >
-                  Dr. Nisha Bhatnagar
-                </Link>
-              <Link
-                to="/gallery"
-                className="text-gray-800 hover:text-primary transition-colors py-2"
-                onClick={closeMobileMenu}
-              >
-                Gallery
-              </Link>
-                {/* <Link to="/specialties" onClick={closeMobileMenu}>
-                  <Button className="rounded-full px-5 py-2 bg-primary hover:bg-primary/90 w-full">
-                    Get Started
-                  </Button>
-                </Link> */}
-              </nav>
-            </div>
-          )}
-        </header>
-
-        <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 text-white pt-16">
+    <MainLayout>
+      <PageTransition>
+        <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 text-white pt-0">
           {/* Hero shapes positioned absolutely, hidden on small screens */}
           <HeroShape
             className="hidden sm:block top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2"
@@ -285,18 +118,11 @@ const LandingPage = () => {
                 <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-white/90 px-2">
                   {content?.description || defaultDescription}
                 </p>
-                {/* Get Started button temporarily hidden
-          <Link to="/specialties">
-            <Button className="rounded-full px-6 py-4 sm:px-8 sm:py-6 text-base sm:text-lg bg-white text-primary hover:bg-white/90">
-              Get Started
-            </Button>
-          </Link>
-          */}
               </>
             )}
           </div>
         </div>
-
+        {/* Our Medical Specialties Section */}
         <section
           ref={specialtiesRef}
           className="py-12 sm:py-16 md:py-20 px-4 bg-white"
@@ -328,7 +154,7 @@ const LandingPage = () => {
 
             <div className="container mx-auto max-w-6xl">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                {/* Eye Care Department Card - Dynamically populated but with original styling */}
+                {/* Eye Care Department Card */}
                 <div
                   className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
                   data-aos="fade-up"
@@ -337,31 +163,29 @@ const LandingPage = () => {
                   onMouseLeave={() => setHoverEyeCare(false)}
                 >
                   <div
-                    className={`bg-gradient-to-r from-blue-400 to-blue-500 p-6 text-white transition-all duration-300 ${
-                      hoverEyeCare ? "scale-105" : ""
-                    }`}
+                    className={`bg-gradient-to-r from-blue-400 to-blue-500 p-6 text-white transition-all duration-300 ${hoverEyeCare ? 'scale-105' : ''
+                      }`}
                   >
                     <h2 className="text-2xl font-bold">
-                      {eyeCareDept?.department || "Eye Care"}
+                      {eyeCareDept?.department || 'Eye Care'}
                     </h2>
                     <p className="text-white/90">
                       {eyeCareDept?.tagline ||
-                        "Expert treatment for all eye conditions"}
+                        'Expert treatment for all eye conditions'}
                     </p>
                   </div>
 
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-3">
-                      {eyeCareDept?.doctor_name || "Dr. Sanjeev Lehri"}
+                      {eyeCareDept?.doctor_name || 'Dr. Sanjeev Lehri'}
                     </h3>
                     <p className="text-gray-600 mb-6">
                       {eyeCareDept?.doctor_bio ||
-                        "Specialist in treating cataracts, glaucoma, refractive errors, and other eye conditions using the latest technology and techniques."}
+                        'Specialist in treating cataracts, glaucoma, refractive errors, and other eye conditions using the latest technology and techniques.'}
                     </p>
 
                     <div className="space-y-2 mb-6">
                       {isLoading ? (
-                        // Loading state
                         Array(4)
                           .fill(0)
                           .map((_, i) => (
@@ -371,7 +195,6 @@ const LandingPage = () => {
                             </div>
                           ))
                       ) : eyeCareServices.length > 0 ? (
-                        // Dynamic services
                         eyeCareServices.map((service) => (
                           <div
                             key={service.id}
@@ -382,7 +205,6 @@ const LandingPage = () => {
                           </div>
                         ))
                       ) : (
-                        // Fallback static content
                         <>
                           <div className="flex items-center gap-2">
                             <Check className="text-blue-500 h-5 w-5" />
@@ -405,23 +227,21 @@ const LandingPage = () => {
                     </div>
 
                     <Link
-                      to={eyeCareDept?.link_url || "/eyecare"}
-                      className={`w-full block text-center py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors group flex items-center justify-center ${
-                        hoverEyeCare ? "bg-blue-600" : ""
-                      }`}
-                    >
-                      {eyeCareDept?.link_text || "Visit Eye Care Department"}
-                      <ArrowRight
-                        className={`ml-2 transition-transform duration-300 ${
-                          hoverEyeCare ? "translate-x-1" : ""
+                      to={eyeCareDept?.link_url || '/eyecare'}
+                      className={`w-full block text-center py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors group flex items-center justify-center ${hoverEyeCare ? 'bg-blue-600' : ''
                         }`}
+                    >
+                      {eyeCareDept?.link_text || 'Visit Eye Care Department'}
+                      <ArrowRight
+                        className={`ml-2 transition-transform duration-300 ${hoverEyeCare ? 'translate-x-1' : ''
+                          }`}
                         size={18}
                       />
                     </Link>
                   </div>
                 </div>
 
-                {/* Gynecology Department Card - Dynamically populated but with original styling */}
+                {/* Gynecology Department Card */}
                 <div
                   className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
                   data-aos="fade-up"
@@ -430,12 +250,11 @@ const LandingPage = () => {
                   onMouseLeave={() => setHoverGynecology(false)}
                 >
                   <div
-                    className={`bg-gradient-to-r from-[#D946EF] to-[#d94991] p-6 text-white transition-all duration-300 ${
-                      hoverGynecology ? "scale-105" : ""
-                    }`}
+                    className={`bg-gradient-to-r from-[#D946EF] to-[#d94991] p-6 text-white transition-all duration-300 ${hoverGynecology ? 'scale-105' : ''
+                      }`}
                   >
                     <h2 className="text-2xl font-bold">
-                      {gynecologyDept?.department || "Gynecology"}
+                      {gynecologyDept?.department || 'Gynecology'}
                     </h2>
                     <p className="text-white/90">
                       {gynecologyDept?.tagline ||
@@ -445,16 +264,15 @@ const LandingPage = () => {
 
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-3">
-                      {gynecologyDept?.doctor_name || "Dr. Nisha Bhatnagar"}
+                      {gynecologyDept?.doctor_name || 'Dr. Nisha Bhatnagar'}
                     </h3>
                     <p className="text-gray-600 mb-6">
                       {gynecologyDept?.doctor_bio ||
-                        "Expert in women's health, fertility treatments, and IVF with a compassionate approach to address all gynecological concerns."}
+                        'Expert in women\'s health, fertility treatments, and IVF with a compassionate approach to address all gynecological concerns.'}
                     </p>
 
                     <div className="space-y-2 mb-6">
                       {isLoading ? (
-                        // Loading state
                         Array(4)
                           .fill(0)
                           .map((_, i) => (
@@ -464,7 +282,6 @@ const LandingPage = () => {
                             </div>
                           ))
                       ) : gynecologyServices.length > 0 ? (
-                        // Dynamic services
                         gynecologyServices.map((service) => (
                           <div
                             key={service.id}
@@ -475,13 +292,12 @@ const LandingPage = () => {
                           </div>
                         ))
                       ) : (
-                        // Fallback static content
                         <>
                           {[
-                            "Fertility Treatments",
-                            "In Vitro Fertilization (IVF)",
+                            'Fertility Treatments',
+                            'In Vitro Fertilization (IVF)',
                             "Women's Health Consultations",
-                            "Reproductive Health Care",
+                            'Reproductive Health Care',
                           ].map((service, index) => (
                             <div
                               key={index}
@@ -496,17 +312,14 @@ const LandingPage = () => {
                     </div>
 
                     <Link
-                      to={gynecologyDept?.link_url || "/gynecology"}
-                      className={`w-full block text-center py-3 px-4 bg-[#d94991] text-white rounded-md hover:bg-[#c73a7c] transition-colors group flex items-center justify-center ${
-                        hoverGynecology ? "bg-[#c73a7c]" : ""
-                      }`}
-                    >
-                      {gynecologyDept?.link_text ||
-                        "Visit Gynecology Department"}
-                      <ArrowRight
-                        className={`ml-2 transition-transform duration-300 ${
-                          hoverGynecology ? "translate-x-1" : ""
+                      to={gynecologyDept?.link_url || '/gynecology'}
+                      className={`w-full block text-center py-3 px-4 bg-[#d94991] text-white rounded-md hover:bg-[#c73a7c] transition-colors group flex items-center justify-center ${hoverGynecology ? 'bg-[#c73a7c]' : ''
                         }`}
+                    >
+                      {gynecologyDept?.link_text || 'Visit Gynecology Department'}
+                      <ArrowRight
+                        className={`ml-2 transition-transform duration-300 ${hoverGynecology ? 'translate-x-1' : ''
+                          }`}
                         size={18}
                       />
                     </Link>
@@ -516,7 +329,6 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-
         {/* Our Expert Doctors Section */}
         <section
           className="py-12 sm:py-16 md:py-20 px-4 bg-gray-50"
@@ -749,11 +561,9 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-
-        {/* Removed 'Ready to Experience Specialized Care?' section and Dr. Sanjeev's contact widget per client request */}
         <Footer />
-      </div>
-    </PageTransition>
+      </PageTransition>
+    </MainLayout>
   );
 };
 
