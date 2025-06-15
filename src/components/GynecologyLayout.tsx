@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import GynecologyNavbar from './GynecologyNavbar';
 import Footer from './Footer';
 import PageTransition from './PageTransition';
+import CustomWhatsAppWidgetNisha from './CustomWhatsAppWidgetNisha';
 
 interface GynecologyLayoutProps {
   children: ReactNode;
@@ -17,10 +18,10 @@ const GynecologyLayout = ({ children }: GynecologyLayoutProps) => {
         </PageTransition>
         </main>
         <Footer />
-        {/* Elfsight WhatsApp Chat Widget */}
-        <div className="fixed bottom-4 right-4 z-50">
-          <div className="elfsight-app-f5987c20-7de0-4b19-a688-ad23bc2c6457" data-elfsight-app-lazy></div>
-        </div>
+        <CustomWhatsAppWidgetNisha 
+          doctorName="Dr. Nisha Bhatnagar"
+          phoneNumber="91 9899557022"
+        />
       </div>
   );
 };

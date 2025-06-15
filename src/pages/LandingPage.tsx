@@ -562,6 +562,7 @@ const LandingPage = () => {
           </div>
         </section>
         <Footer />
+        
       </PageTransition>
     </MainLayout>
   );

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import EyeCareNavbar from './EyeCareNavbar';
 import Footer from './Footer';
 import PageTransition from './PageTransition';
+import CustomWhatsAppWidget from './CustomWhatsAppWidget';
 
 interface EyeCareLayoutProps {
   children: ReactNode;
@@ -17,11 +18,10 @@ const EyeCareLayout = ({ children }: EyeCareLayoutProps) => {
         </PageTransition>
         </main>
         <Footer />
-        
-        {/* Elfsight WhatsApp Chat Widget for Eyecare */}
-        <div className="fixed bottom-4 right-4 z-50">
-          <div className="elfsight-app-a33bc770-938d-4a29-a90b-1d1514e16817" data-elfsight-app-lazy></div>
-        </div>
+        <CustomWhatsAppWidget 
+            doctorName="Dr. Sanjeev Lehri"
+            phoneNumber="919811150984"
+        />
       </div>
   );
 };

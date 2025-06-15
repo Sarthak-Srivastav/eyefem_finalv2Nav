@@ -4,13 +4,6 @@ const Footer = () => {
   return (
     <>
       <footer className="bg-gradient-to-r from-gray-50 to-gray-100 pt-12 pb-8 border-t relative">
-        {/* WhatsApp Widget */}
-        <div className="fixed bottom-4 right-4 z-50">
-          <div
-            className="elfsight-app-a33bc770-938d-4a29-a90b-1d1514e16817"
-            data-elfsight-app-lazy
-          ></div>
-        </div>
         <div className="container mx-auto px-4">
           <div
             className="grid grid-cols-1 md:grid-cols-4 gap-8"
@@ -79,7 +72,7 @@ const Footer = () => {
                 </div>
                 <div className="flex items-center gap-3 text-gray-600">
                   <Phone size={18} />
-                  <span>+91 9811150984</span>
+                  <span>+91 9811150984</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-600">
                   <Mail size={18} />
