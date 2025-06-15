@@ -38,7 +38,7 @@ const WhatsAppIcon = ({ size = 24 }: { size?: number }) => (
 const CustomWhatsAppWidget: React.FC<CustomWhatsAppWidgetProps> = ({
   doctorName,
   phoneNumber,
-  imageUrl = "../../public/Sanjeev.png",
+  imageUrl = "https://pqkhtgdmgnneooleniis.supabase.co/storage/v1/object/public/website-images/whatsapp%20widget/SANJEEV.png",
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
