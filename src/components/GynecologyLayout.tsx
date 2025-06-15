@@ -20,7 +20,7 @@ const GynecologyLayout = ({ children }: GynecologyLayoutProps) => {
         <Footer />
         <CustomWhatsAppWidgetNisha 
           doctorName="Dr. Nisha Bhatnagar"
-          phoneNumber="91 9899557022"
+          phoneNumber="919899557022"
         />
       </div>
   );
