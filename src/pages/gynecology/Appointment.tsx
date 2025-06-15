@@ -318,7 +318,7 @@ const GynecologyAppointment = () => {
                     <p className="text-gray-600">
                       B-8, Vishal Enclave, Rajouri Garden
                       <br />
-                      New Delhi - 110008
+                      New Delhi - 110027
                     </p>
                   </div>
                 </div>
