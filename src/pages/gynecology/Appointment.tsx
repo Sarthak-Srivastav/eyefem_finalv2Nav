@@ -351,11 +351,11 @@ const GynecologyAppointment = () => {
                     <h3 className="text-xl font-bold mb-1">Working Hours</h3>
                     <p className="text-gray-600">
                       Monday to Saturday: 10:00 AM - 6:00 PM <br />
-                      at Ayeva IFV Centrer
+                      at Ayeva IVF Centrer
                     </p>
                     <br />
                     <p className="text-gray-600">
-                      Available at clinic EyeFem on appointment basis
+                      Available at Clinic EyeFem on appointment basis
                     </p>
                     <p className="text-gray-600">Sunday: Closed</p>
                   </div>
