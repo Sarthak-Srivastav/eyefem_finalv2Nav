@@ -153,7 +153,7 @@ const GynecologyHome = () => {
                         Book an Appointment
                       </Button>
                     </Link>
-                    <Link to="/gynecology/health" className="w-full sm:w-auto">
+                    {/* <Link to="/gynecology/health" className="w-full sm:w-auto">
                       <Button
                         className="mac-btn bg-transparent border border-white text-white hover:bg-white/10 w-full sm:w-auto text-xs sm:text-sm md:text-base px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-3"
                         data-editable="true"
@@ -161,7 +161,7 @@ const GynecologyHome = () => {
                       >
                         Women's Health Issues
                       </Button>
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
 
