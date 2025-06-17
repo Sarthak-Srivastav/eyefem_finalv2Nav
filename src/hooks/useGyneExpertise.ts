@@ -46,19 +46,61 @@ import {
   Camera,
   Sun,
   Moon,
-  ScanSearch
+  ScanSearch,
+  Folder,
+  FilePlus,
+  FileSearch,
+  MessageCircle,
+  MessageSquare,
+  MessageSquareText,
+  Phone,
+  PhoneCall,
+  PhoneForwarded,
+  Tablet,
+  Laptop,
+  Cpu,
+  Brain,
+  Dna,
+  ThermometerSun,
+  ThermometerSnowflake,
+  Bandage,
+  FirstAidKit,
+  HeartCrack,
+  TestTubes,
+  ClipboardCheck,
+  ClipboardX,
+  FileWarning,
+  FileCheck,
+  FileX,
+  FileClock,
+  FileHeart,
+  FileMedical,
+  Beaker,
+  Atom,
+  Layers,
+  AlertTriangle,
+  MapPin,
+  Globe,
+  Scan,
+  ScanEye,
+  XCircle,
+  PlusCircle,
+  CheckCircle,
+  Loader2,
+  Cloud,
+  CloudFog,
+  CloudMoon,
+  CloudSun,
+  CloudRain,
+  CloudSnow,
+  CloudDrizzle,
+  SunMoon,
+  EyeTable,
+  Radiation,
+  Repeat,
+  Rocket
 } from 'lucide-react';
 
-export interface GyneExpertise {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  sort_order: number;
-  created_at: string;
-}
-
-// Used to map icon string names to actual Lucide React components
 export const iconMap = {
   Star,
   ThumbsUp,
@@ -105,8 +147,70 @@ export const iconMap = {
   Camera,
   Sun,
   Moon,
-  ScanSearch
+  ScanSearch,
+  Folder,
+  FilePlus,
+  FileSearch,
+  MessageCircle,
+  MessageSquare,
+  MessageSquareText,
+  Phone,
+  PhoneCall,
+  PhoneForwarded,
+  Tablet,
+  Laptop,
+  Cpu,
+  Brain,
+  Dna,
+  ThermometerSun,
+  ThermometerSnowflake,
+  Bandage,
+  FirstAidKit,
+  HeartCrack,
+  TestTubes,
+  ClipboardCheck,
+  ClipboardX,
+  FileWarning,
+  FileCheck,
+  FileX,
+  FileClock,
+  FileHeart,
+  FileMedical,
+  Beaker,
+  Atom,
+  Layers,
+  AlertTriangle,
+  MapPin,
+  Globe,
+  Scan,
+  ScanEye,
+  XCircle,
+  PlusCircle,
+  CheckCircle,
+  Loader2,
+  Cloud,
+  CloudFog,
+  CloudMoon,
+  CloudSun,
+  CloudRain,
+  CloudSnow,
+  CloudDrizzle,
+  SunMoon,
+  EyeTable,
+  Radiation,
+  Repeat,
+  Rocket
 };
+
+export interface GyneExpertise {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  sort_order: number;
+  created_at: string;
+}
+
 
 export type IconName = keyof typeof iconMap;
 

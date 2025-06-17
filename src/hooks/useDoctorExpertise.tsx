@@ -46,18 +46,61 @@ import {
   Camera,
   Sun,
   Moon,
-  ScanSearch
+  ScanSearch,
+  Folder,
+  FilePlus,
+  FileSearch,
+  MessageCircle,
+  MessageSquare,
+  MessageSquareText,
+  Phone,
+  PhoneCall,
+  PhoneForwarded,
+  Tablet,
+  Laptop,
+  Cpu,
+  Brain,
+  Dna,
+  ThermometerSun,
+  ThermometerSnowflake,
+  Bandage,
+  FirstAidKit,
+  HeartCrack,
+  TestTubes,
+  ClipboardCheck,
+  ClipboardX,
+  FileWarning,
+  FileCheck,
+  FileX,
+  FileClock,
+  FileHeart,
+  FileMedical,
+  Beaker,
+  Atom,
+  Layers,
+  AlertTriangle,
+  MapPin,
+  Globe,
+  Scan,
+  ScanEye,
+  XCircle,
+  PlusCircle,
+  CheckCircle,
+  Loader2,
+  Cloud,
+  CloudFog,
+  CloudMoon,
+  CloudSun,
+  CloudRain,
+  CloudSnow,
+  CloudDrizzle,
+  SunMoon,
+  EyeTable,
+  Radiation,
+  Repeat,
+  Rocket
 } from 'lucide-react';
-export interface DoctorExpertise {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  sort_order: number;
-  created_at: string;
-}
 
-// Used to map icon string names to actual Lucide React components
 export const iconMap = {
   Star,
   ThumbsUp,
@@ -104,8 +147,71 @@ export const iconMap = {
   Camera,
   Sun,
   Moon,
-  ScanSearch
+  ScanSearch,
+  Folder,
+  FilePlus,
+  FileSearch,
+  MessageCircle,
+  MessageSquare,
+  MessageSquareText,
+  Phone,
+  PhoneCall,
+  PhoneForwarded,
+  Tablet,
+  Laptop,
+  Cpu,
+  Brain,
+  Dna,
+  ThermometerSun,
+  ThermometerSnowflake,
+  Bandage,
+  FirstAidKit,
+  HeartCrack,
+  TestTubes,
+  ClipboardCheck,
+  ClipboardX,
+  FileWarning,
+  FileCheck,
+  FileX,
+  FileClock,
+  FileHeart,
+  FileMedical,
+  Beaker,
+  Atom,
+  Layers,
+  AlertTriangle,
+  MapPin,
+  Globe,
+  Scan,
+  ScanEye,
+  XCircle,
+  PlusCircle,
+  CheckCircle,
+  Loader2,
+  Cloud,
+  CloudFog,
+  CloudMoon,
+  CloudSun,
+  CloudRain,
+  CloudSnow,
+  CloudDrizzle,
+  SunMoon,
+  EyeTable,
+  Radiation,
+  Repeat,
+  Rocket
 };
+
+export interface DoctorExpertise {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  sort_order: number;
+  created_at: string;
+}
+
+// Used to map icon string names to actual Lucide React components
 
 export type IconName = keyof typeof iconMap;
 
@@ -117,7 +223,7 @@ export const useDoctorExpertise = () => {
   useEffect(() => {
     fetchExpertise();
   }, []);
-  
+
   const fetchExpertise = async () => {
     setIsLoading(true);
     try {
@@ -125,9 +231,9 @@ export const useDoctorExpertise = () => {
         .from('csm_doctor_expertise_latest')
         .select('*')
         .order('sort_order');
-      
+
       if (error) throw error;
-      
+
       if (data && data.length > 0) {
         setExpertise(data);
       } else {
@@ -193,9 +299,9 @@ export const useDoctorExpertise = () => {
         .from('csm_doctor_expertise_latest')
         .update(data)
         .eq('id', id);
-      
+
       if (error) throw error;
-      
+
       await fetchExpertise();
       return true;
     } catch (err) {
@@ -209,9 +315,9 @@ export const useDoctorExpertise = () => {
       const { error } = await supabase
         .from('csm_doctor_expertise_latest')
         .insert([expertiseItem]);
-      
+
       if (error) throw error;
-      
+
       await fetchExpertise();
       return true;
     } catch (err) {
@@ -226,9 +332,9 @@ export const useDoctorExpertise = () => {
         .from('csm_doctor_expertise_latest')
         .delete()
         .eq('id', id);
-      
+
       if (error) throw error;
-      
+
       await fetchExpertise();
       return true;
     } catch (err) {
@@ -237,10 +343,10 @@ export const useDoctorExpertise = () => {
     }
   };
 
-  return { 
-    expertise, 
-    isLoading, 
-    error, 
+  return {
+    expertise,
+    isLoading,
+    error,
     refreshExpertise: fetchExpertise,
     updateExpertise,
     addExpertise,
