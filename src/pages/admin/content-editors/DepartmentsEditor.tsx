@@ -458,22 +458,27 @@ export const DepartmentsEditor = () => {
             
             {!currentDeptForServices ? (
               <p className="text-gray-500">Select a department first</p>
-            ) : !departmentServices[currentDeptForServices] || departmentServices[currentDeptForServices].length === 0 ? (
-              <p className="text-gray-500">No services for this department</p>
-            ) : (
-              <div className="space-y-2">
-                {departmentServices[currentDeptForServices]?.map(service => (
-                  <div 
-                    key={service.id}
-                    className={`p-3 rounded-md cursor-pointer hover:bg-gray-100 transition-colors
-                      ${selectedService?.id === service.id ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50'}`}
-                    onClick={() => handleSelectService(service)}
-                  >
-                    <div className="font-medium">{service.service}</div>
+            ) : (() => {
+                const currentDeptObj = departments.find(d => d.department === currentDeptForServices);
+                const currentDeptId = currentDeptObj?.id ?? "";
+                const servicesForDept = currentDeptId ? departmentServices[currentDeptId] ?? [] : [];
+                return servicesForDept.length === 0 ? (
+                  <p className="text-gray-500">No services for this department</p>
+                ) : (
+                  <div className="space-y-2">
+                    {servicesForDept.map(service => (
+                      <div 
+                        key={service.id}
+                        className={`p-3 rounded-md cursor-pointer hover:bg-gray-100 transition-colors
+                          ${selectedService?.id === service.id ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50'}`}
+                        onClick={() => handleSelectService(service)}
+                      >
+                        <div className="font-medium">{service.service}</div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                );
+              })()}
             
             <div className="mt-4">
               <Button 
