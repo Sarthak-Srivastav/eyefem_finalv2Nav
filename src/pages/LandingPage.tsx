@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Shield, Beaker, Heart } from "lucide-react";
+import { ArrowRight, Check, Shield, Beaker, Heart ,AlertTriangle} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageTransition from "@/components/PageTransition";
 import HeroShape from "@/components/HeroShape";
@@ -10,24 +10,163 @@ import { useServiceCards } from "@/hooks/useServiceCards";
 import { useDepartments } from "@/hooks/useDepartments";
 import { useWhyChooseUs } from "@/hooks/useWhyChooseUs";
 import { MainLayout } from "@/components";
+import { supabase } from '@/integrations/supabase/client';
+
+
+interface DoctorSpeciality {
+  id: number;
+  name: string;
+  specialization: string;
+  image_url: string;
+}
 
 const LandingPage = () => {
+  const [loading, setLoading] = useState(true);
+  const [specialities, setSpecialities] = useState<DoctorSpeciality[]>([]);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<number | null>(null);
+
+
+  const [error, setError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string | null>(null);
+
   const [hoverEyeCare, setHoverEyeCare] = useState(false);
   const [hoverGynecology, setHoverGynecology] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const specialtiesRef = useRef<HTMLDivElement>(null);
 
   const { departments, departmentServices, isLoading } = useDepartments();
-  const eyeCareDept = departments.find((d) =>
-    d.department.toLowerCase().includes("eye")
-  );
-  const gynecologyDept = departments.find((d) =>
-    d.department.toLowerCase().includes("gyn")
-  );
-  const eyeCareServices =
-    departmentServices[eyeCareDept?.department || "Eye Care"] || [];
-  const gynecologyServices =
-    departmentServices[gynecologyDept?.department || "Gynecology"] || [];
+  const EYE_DEPT_ID = "5f705d17-ce8e-4c99-8d5a-03591dbbd3f6";
+  const GYNE_DEPT_ID = "6066b1cf-cc97-4b3b-b75f-a8d00622adc1";
+
+  const eyeCareDept = departments.find((d) => d.id === EYE_DEPT_ID);
+  const gynecologyDept = departments.find((d) => d.id === GYNE_DEPT_ID);
+
+  const eyeCareServices = departmentServices[EYE_DEPT_ID] ?? [];
+  const gynecologyServices = departmentServices[GYNE_DEPT_ID] ?? [];
+   // Default doctors as fallback
+   const defaultDoctors = [
+    {
+      id: -1,
+      name: 'Dr. Sanjeev Lehri',
+      specialization: 'Ophthalmologist & Eye Surgeon',
+      image_url: '/eyefemm_pic_uploads/4f0ab2f1-cfac-48ce-9d14-205a833d4973.png'
+    },
+    {
+      id: -2,
+      name: 'Dr. Nisha Bhatnagar',
+      specialization: 'Gynecologist & Fertility Specialist',
+      image_url: '/eyefemm_pic_uploads/8205aaa8-556e-4663-be5d-9619f8b8ddeb.png'
+    }
+  ];
+  
+  useEffect(() => {
+    fetchDoctorSpecialities();
+  }, []);
+  
+  // Helper function to ensure image URLs are properly formatted
+  const formatImageUrl = (url: string) => {
+    if (!url) return '';
+    
+    // If it's already an absolute URL (starts with http or https)
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    
+    // If it's a relative path
+    if (url.startsWith('/')) {
+      // For local development, prepend the base URL
+      return url;
+    }
+    
+    return url;
+  };
+  
+  const fetchDoctorSpecialities = async () => {
+    setLoading(true);
+    try {
+      // First, check if the table exists by examining its structure
+      const { data: tableInfo, error: tableError } = await supabase
+        .from('csm_doctors_profile_specilities' as any)
+        .select('*')
+        .limit(1);
+        
+      if (tableError) {
+        setDebugInfo(`Table error: ${tableError.message}`);
+        throw new Error(`Table error: ${tableError.message}`);
+      }
+      
+      // Fetch all data from the table
+      const { data, error } = await supabase
+        .from('csm_doctors_profile_specilities' as any)
+        .select('*');
+        
+      if (error) {
+        setDebugInfo(`Fetch error: ${error.message}`);
+        throw new Error(`Fetch error: ${error.message}`);
+      }
+      
+      setDebugInfo(`Data fetched: ${JSON.stringify(data)}`);
+      
+      if (data && data.length > 0) {
+        console.log("Fetched doctor specialties:", data);
+        
+        // Process the image URLs and handle null safety
+        const processedData = data ? data.map(doctor => {
+          // Ensure doctor is an object and not null
+          if (doctor && typeof doctor === 'object') {
+            return {
+              id: typeof doctor.id === 'number' ? doctor.id : 0,
+              name: typeof doctor.name === 'string' ? doctor.name : '',
+              specialization: typeof doctor.specialization === 'string' ? doctor.specialization : '',
+              image_url: formatImageUrl(typeof doctor.image_url === 'string' ? doctor.image_url : '')
+            };
+          }
+          // Fallback for null/undefined doctors
+          return { id: 0, name: '', specialization: '', image_url: '' };
+        }) : [];
+        
+        // Safety check to ensure we have processed data
+        if (processedData.length > 0) {
+          setSpecialities(processedData);
+          setSelectedDoctorId(Number(processedData[0].id));
+        } else {
+          // Use default data if nothing was returned
+          setDebugInfo("Using default specialties as processed data was empty");
+          // Default data handling is already in the else branch below
+        }
+        
+        // State updates are now handled in the if/else block above
+      } else {
+        setDebugInfo("No data found in database, using defaults");
+        console.log("No doctor specialties found in database, using defaults");
+        setSpecialities(defaultDoctors);
+        setSelectedDoctorId(defaultDoctors[0].id);
+      }
+    } catch (err) {
+      console.error('Error fetching doctor specialities:', err);
+      setError(`Failed to load doctor specialties: ${err.message}`);
+      
+      // Use defaults on error
+      setSpecialities(defaultDoctors);
+      setSelectedDoctorId(defaultDoctors[0].id);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleDoctorSelect = (doctorId: number) => {
+    setSelectedDoctorId(doctorId);
+  };
+  
+  const getSelectedDoctor = () => {
+    return specialities.find(doctor => doctor.id === selectedDoctorId);
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    // Use a fallback image if the original fails to load
+    e.currentTarget.src = '/eyefemm_pic_uploads/default-doctor.png';
+    e.currentTarget.onerror = null; // Prevent infinite loop
+  };
 
   useEffect(() => {
     const checkMobile = () => {
@@ -159,9 +298,8 @@ const LandingPage = () => {
                   onMouseLeave={() => setHoverEyeCare(false)}
                 >
                   <div
-                    className={`bg-gradient-to-r from-blue-400 to-blue-500 p-6 text-white transition-all duration-300 ${
-                      hoverEyeCare ? "scale-105" : ""
-                    }`}
+                    className={`bg-gradient-to-r from-blue-400 to-blue-500 p-6 text-white transition-all duration-300 ${hoverEyeCare ? "scale-105" : ""
+                      }`}
                   >
                     <h2 className="text-2xl font-bold">
                       {eyeCareDept?.department || "Eye Care"}
@@ -191,49 +329,25 @@ const LandingPage = () => {
                               <div className="w-32 h-4 bg-gray-100 rounded animate-pulse"></div>
                             </div>
                           ))
-                      ) : eyeCareServices.length > 0 ? (
+                      ) : (
                         eyeCareServices.map((service) => (
-                          <div
-                            key={service.id}
-                            className="flex items-center gap-2"
-                          >
+                          <div key={service.id} className="flex items-center gap-2">
                             <Check className="text-blue-500 h-5 w-5" />
                             <span>{service.service}</span>
                           </div>
                         ))
-                      ) : (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <Check className="text-blue-500 h-5 w-5" />
-                            <span>Cataract Surgery</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Check className="text-blue-500 h-5 w-5" />
-                            <span>Glaucoma Management</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Check className="text-blue-500 h-5 w-5" />
-                            <span>Refractive Error Correction</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Check className="text-blue-500 h-5 w-5" />
-                            <span>Retinal Disorder Treatment</span>
-                          </div>
-                        </>
                       )}
                     </div>
 
                     <Link
                       to={eyeCareDept?.link_url || "/eyecare"}
-                      className={`w-full block text-center py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors group flex items-center justify-center ${
-                        hoverEyeCare ? "bg-blue-600" : ""
-                      }`}
+                      className={`w-full block text-center py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors group flex items-center justify-center ${hoverEyeCare ? "bg-blue-600" : ""
+                        }`}
                     >
                       {eyeCareDept?.link_text || "Visit Eye Care Department"}
                       <ArrowRight
-                        className={`ml-2 transition-transform duration-300 ${
-                          hoverEyeCare ? "translate-x-1" : ""
-                        }`}
+                        className={`ml-2 transition-transform duration-300 ${hoverEyeCare ? "translate-x-1" : ""
+                          }`}
                         size={18}
                       />
                     </Link>
@@ -249,9 +363,8 @@ const LandingPage = () => {
                   onMouseLeave={() => setHoverGynecology(false)}
                 >
                   <div
-                    className={`bg-gradient-to-r from-[#D946EF] to-[#d94991] p-6 text-white transition-all duration-300 ${
-                      hoverGynecology ? "scale-105" : ""
-                    }`}
+                    className={`bg-gradient-to-r from-[#D946EF] to-[#d94991] p-6 text-white transition-all duration-300 ${hoverGynecology ? "scale-105" : ""
+                      }`}
                   >
                     <h2 className="text-2xl font-bold">
                       {gynecologyDept?.department || "Gynecology"}
@@ -281,48 +394,26 @@ const LandingPage = () => {
                               <div className="w-32 h-4 bg-gray-100 rounded animate-pulse"></div>
                             </div>
                           ))
-                      ) : gynecologyServices.length > 0 ? (
+                      ) : (
                         gynecologyServices.map((service) => (
-                          <div
-                            key={service.id}
-                            className="flex items-center gap-2"
-                          >
+                          <div key={service.id} className="flex items-center gap-2">
                             <Check className="text-[#d94991] h-5 w-5" />
                             <span>{service.service}</span>
                           </div>
                         ))
-                      ) : (
-                        <>
-                          {[
-                            "Fertility Treatments",
-                            "In Vitro Fertilization (IVF)",
-                            "Women's Health Consultations",
-                            "Reproductive Health Care",
-                          ].map((service, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center gap-2"
-                            >
-                              <Check className="text-[#d94991] h-5 w-5" />
-                              <span>{service}</span>
-                            </div>
-                          ))}
-                        </>
                       )}
                     </div>
 
                     <Link
                       to={gynecologyDept?.link_url || "/gynecology"}
-                      className={`w-full block text-center py-3 px-4 bg-[#d94991] text-white rounded-md hover:bg-[#c73a7c] transition-colors group flex items-center justify-center ${
-                        hoverGynecology ? "bg-[#c73a7c]" : ""
-                      }`}
+                      className={`w-full block text-center py-3 px-4 bg-[#d94991] text-white rounded-md hover:bg-[#c73a7c] transition-colors group flex items-center justify-center ${hoverGynecology ? "bg-[#c73a7c]" : ""
+                        }`}
                     >
                       {gynecologyDept?.link_text ||
                         "Visit Gynecology Department"}
                       <ArrowRight
-                        className={`ml-2 transition-transform duration-300 ${
-                          hoverGynecology ? "translate-x-1" : ""
-                        }`}
+                        className={`ml-2 transition-transform duration-300 ${hoverGynecology ? "translate-x-1" : ""
+                          }`}
                         size={18}
                       />
                     </Link>
@@ -338,82 +429,78 @@ const LandingPage = () => {
           data-aos="fade-up"
           data-aos-duration="1000"
         >
-          <div className="container mx-auto max-w-6xl">
-            <h2
-              className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 md:mb-12"
-              data-aos="fade-up"
-            >
-              Our Expert Doctors
-            </h2>
+          <div className="py-8 sm:py-12 md:py-16 px-4 bg-gray-50">
+            <div className="container mx-auto max-w-6xl">
+              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 md:mb-12" data-aos="fade-up">
+                Our Expert Doctors
+              </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              {/* Dr. Sanjeev Lehri */}
-              <div
-                className="text-center group"
-                data-aos="fade-up"
-                data-aos-delay="100"
-              >
-                <div className="mb-6 mx-auto w-32 h-32 rounded-full overflow-hidden border-4 border-blue-200 transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg">
-                  <img
-                    src="/eyefemm_pic_uploads/4f0ab2f1-cfac-48ce-9d14-205a833d4973.png"
-                    alt="Dr. Sanjeev Lehri"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "/eyefemm_pic_uploads/default-doctor.png";
-                      e.currentTarget.onerror = null;
-                    }}
-                  />
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {[1, 2].map(i => (
+                    <div key={i} className="text-center" data-aos="fade-up" data-aos-delay={i * 100}>
+                      <div className="mb-6 mx-auto w-32 h-32 rounded-full overflow-hidden bg-gray-200 animate-pulse"></div>
+                      <div className="w-48 h-5 bg-gray-200 rounded mx-auto mb-2 animate-pulse"></div>
+                      <div className="w-36 h-4 bg-gray-100 rounded mx-auto mb-4 animate-pulse"></div>
+                      <div className="w-56 h-10 bg-gray-200 rounded-md mx-auto animate-pulse"></div>
+                    </div>
+                  ))}
                 </div>
-                <h3 className="text-xl font-bold mb-2 transition-colors group-hover:text-blue-600">
-                  Dr. Sanjeev Lehri
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Ophthalmologist & Eye Surgeon
-                </p>
-                <Link to="/eyecare/doctor">
-                  <Button
-                    variant="outline"
-                    className="border-blue-500 text-blue-500 hover:bg-blue-50 group-hover:bg-blue-500 group-hover:text-white"
-                  >
-                    View Profile & Reviews
-                  </Button>
-                </Link>
-              </div>
+              ) : error ? (
+                <div className="text-center text-red-500 flex items-center justify-center gap-2">
+                  <AlertTriangle size={20} />
+                  <p>Error loading doctor data. Please refresh the page.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                  {specialities.slice(0, 2).map((doctor, index) => {
+                    // Define styling based on specialty type (eye care vs gynecology)
+                    const isEyeDoctor = doctor.specialization.toLowerCase().includes('ophthalm') ||
+                      doctor.specialization.toLowerCase().includes('eye');
 
-              {/* Dr. Nisha Bhatnagar */}
-              <div
-                className="text-center group"
-                data-aos="fade-up"
-                data-aos-delay="200"
-              >
-                <div className="mb-6 mx-auto w-32 h-32 rounded-full overflow-hidden border-4 border-[#d94991]/20 transition-all duration-300 group-hover:border-[#d94991] group-hover:shadow-lg">
-                  <img
-                    src="/eyefemm_pic_uploads/8205aaa8-556e-4663-be5d-9619f8b8ddeb.png"
-                    alt="Dr. Nisha Bhatnagar"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "/eyefemm_pic_uploads/default-doctor.png";
-                      e.currentTarget.onerror = null;
-                    }}
-                  />
+                    const styling = isEyeDoctor
+                      ? {
+                        borderColor: 'border-blue-200',
+                        hoverBorderColor: 'group-hover:border-blue-400',
+                        textColor: 'group-hover:text-blue-600',
+                        buttonClass: 'border-blue-500 text-blue-500 hover:bg-blue-50 group-hover:bg-blue-500 group-hover:text-white',
+                        path: '/eyecare/doctor'
+                      }
+                      : {
+                        borderColor: 'border-[#d94991]/20',
+                        hoverBorderColor: 'group-hover:border-[#d94991]',
+                        textColor: 'group-hover:text-[#d94991]',
+                        buttonClass: 'border-[#d94991] text-[#d94991] hover:bg-[#d94991]/10 group-hover:bg-[#d94991] group-hover:text-white',
+                        path: '/gynecology/doctor'
+                      };
+
+                    return (
+                      <div key={doctor.id} className="text-center group" data-aos="fade-up" data-aos-delay={100 * (index + 1)}>
+                        <div className={`mb-6 mx-auto w-32 h-32 rounded-full overflow-hidden border-4 ${styling.borderColor} transition-all duration-300 ${styling.hoverBorderColor} group-hover:shadow-lg`}>
+                          <img
+                            src={doctor.image_url}
+                            alt={doctor.name}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            onError={handleImageError}
+                          />
+                        </div>
+                        <h3 className={`text-xl font-bold mb-2 transition-colors ${styling.textColor}`}>
+                          {doctor.name}
+                        </h3>
+                        <p className="text-gray-600 mb-4">{doctor.specialization}</p>
+                        <Link to={styling.path}>
+                          <Button
+                            variant="outline"
+                            className={styling.buttonClass}
+                          >
+                            View Profile & Reviews
+                          </Button>
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </div>
-                <h3 className="text-xl font-bold mb-2 transition-colors group-hover:text-[#d94991]">
-                  Dr. Nisha Bhatnagar
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Gynecologist & Fertility Specialist
-                </p>
-                <Link to="/gynecology/doctor">
-                  <Button
-                    variant="outline"
-                    className="border-[#d94991] text-[#d94991] hover:bg-[#d94991]/10 group-hover:bg-[#d94991] group-hover:text-white"
-                  >
-                    View Profile & Reviews
-                  </Button>
-                </Link>
-              </div>
+              )}
             </div>
           </div>
         </section>

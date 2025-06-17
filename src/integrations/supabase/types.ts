@@ -203,6 +203,63 @@ export interface Database {
         }
         Relationships: []
       }
+      csm_specialities_departments: {
+        Row: {
+          id: string
+          department: string
+          tagline: string
+          doctor_name: string
+          doctor_bio: string
+          link_text: string
+          link_url: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          department: string
+          tagline: string
+          doctor_name: string
+          doctor_bio: string
+          link_text: string
+          link_url: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          department?: string
+          tagline?: string
+          doctor_name?: string
+          doctor_bio?: string
+          link_text?: string
+          link_url?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      csm_specialities_departments_services: {
+        Row: {
+          id: string
+          department: string
+          service: string
+          department_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          department: string
+          service: string
+          department_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          department?: string
+          service?: string
+          department_id?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       blocks: {
         Row: {
           content: Json

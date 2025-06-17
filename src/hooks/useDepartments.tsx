@@ -15,6 +15,7 @@ interface DepartmentService {
   id: string;
   department: string;
   service: string;
+  department_id?: string | null;
 }
 
 export const useDepartments = () => {
@@ -46,14 +47,20 @@ export const useDepartments = () => {
       
       if (servicesError) throw servicesError;
       
-      // Group services by department
+      // Build a mapping from department name ➜ id to support look-ups by id
+      const nameToId: Record<string, string> = {};
+      (deptData || []).forEach((dept) => {
+        nameToId[dept.department] = dept.id;
+      });
+
       const servicesByDept: Record<string, DepartmentService[]> = {};
-      
-      servicesData?.forEach(service => {
-        if (!servicesByDept[service.department]) {
-          servicesByDept[service.department] = [];
+
+      servicesData?.forEach((service) => {
+        const key = nameToId[service.department] || service.department;
+        if (!servicesByDept[key]) {
+          servicesByDept[key] = [];
         }
-        servicesByDept[service.department].push(service);
+        servicesByDept[key].push(service as DepartmentService);
       });
       
       setDepartments(deptData || []);
