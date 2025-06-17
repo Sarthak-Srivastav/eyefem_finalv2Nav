@@ -1,6 +1,53 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Star, ThumbsUp, FileText, BookOpen, Calendar } from 'lucide-react';
+import {
+  Star,
+  ThumbsUp,
+  FileText,
+  BookOpen,
+  Calendar,
+  Baby,
+  HeartPulse,
+  Stethoscope,
+  Syringe,
+  Microscope,
+  Activity,
+  Shield,
+  Search,
+  Pill,
+  FlaskConical,
+  Users,
+  Hourglass,
+  Droplet,
+  Hospital,
+  TestTube,
+  CalendarCheck,
+  ClipboardList,
+  User,
+  AlertCircle,
+  Bell,
+  Bookmark,
+  Heart,
+  UserCheck,
+  UserPlus,
+  Thermometer,
+  TimerReset,
+  ScanLine,
+  Settings,
+  Eye,
+  EyeOff,
+  EyeIcon,
+  ZoomIn,
+  ZoomOut,
+  Focus,
+  Glasses,
+  Flashlight,
+  Monitor,
+  Camera,
+  Sun,
+  Moon,
+  ScanSearch
+} from 'lucide-react';
 
 export interface GyneExpertise {
   id: string;
@@ -14,10 +61,51 @@ export interface GyneExpertise {
 // Used to map icon string names to actual Lucide React components
 export const iconMap = {
   Star,
-  ThumbsUp, 
+  ThumbsUp,
   FileText,
   BookOpen,
-  Calendar
+  Calendar,
+  Baby,
+  HeartPulse,
+  Stethoscope,
+  Syringe,
+  Microscope,
+  Activity,
+  Shield,
+  Search,
+  Pill,
+  FlaskConical,
+  Users,
+  Hourglass,
+  Droplet,
+  Hospital,
+  TestTube,
+  CalendarCheck,
+  ClipboardList,
+  User,
+  AlertCircle,
+  Bell,
+  Bookmark,
+  Heart,
+  UserCheck,
+  UserPlus,
+  Thermometer,
+  TimerReset,
+  ScanLine,
+  Settings,
+  Eye,
+  EyeOff,
+  EyeIcon,
+  ZoomIn,
+  ZoomOut,
+  Focus,
+  Glasses,
+  Flashlight,
+  Monitor,
+  Camera,
+  Sun,
+  Moon,
+  ScanSearch
 };
 
 export type IconName = keyof typeof iconMap;
@@ -30,7 +118,7 @@ export const useGyneExpertise = () => {
   useEffect(() => {
     fetchExpertise();
   }, []);
-  
+
   const fetchExpertise = async () => {
     setIsLoading(true);
     try {
@@ -38,9 +126,9 @@ export const useGyneExpertise = () => {
         .from('csm_gyne_expertise')
         .select('*')
         .order('sort_order');
-      
+
       if (error) throw error;
-      
+
       if (data && data.length > 0) {
         setExpertise(data);
       } else {
@@ -106,9 +194,9 @@ export const useGyneExpertise = () => {
         .from('csm_gyne_expertise')
         .update(data)
         .eq('id', id);
-      
+
       if (error) throw error;
-      
+
       await fetchExpertise();
       return true;
     } catch (err) {
@@ -122,9 +210,9 @@ export const useGyneExpertise = () => {
       const { error } = await supabase
         .from('csm_gyne_expertise')
         .insert([expertiseItem]);
-      
+
       if (error) throw error;
-      
+
       await fetchExpertise();
       return true;
     } catch (err) {
@@ -139,9 +227,9 @@ export const useGyneExpertise = () => {
         .from('csm_gyne_expertise')
         .delete()
         .eq('id', id);
-      
+
       if (error) throw error;
-      
+
       await fetchExpertise();
       return true;
     } catch (err) {
@@ -150,10 +238,10 @@ export const useGyneExpertise = () => {
     }
   };
 
-  return { 
-    expertise, 
-    isLoading, 
-    error, 
+  return {
+    expertise,
+    isLoading,
+    error,
     refreshExpertise: fetchExpertise,
     updateExpertise,
     addExpertise,

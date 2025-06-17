@@ -373,7 +373,7 @@ const GynecologyDoctor = () => {
                     data-aos-delay={100 * (index + 1)}
                   >
                     <div className="mb-3 sm:mb-4 text-gynecology">
-                      {/* <IconComponent className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10" /> */}
+                      <IconComponent className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10" />
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gynecology">{item.title}</h3>
                     <p className="text-gray-600 text-sm sm:text-base">{item.description}</p>
