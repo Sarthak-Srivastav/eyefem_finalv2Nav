@@ -1,21 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  Check,
-  Shield,
-  Beaker,
-  Heart,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import PageTransition from '@/components/PageTransition';
-import HeroShape from '@/components/HeroShape';
-import Footer from '@/components/Footer';
-import { usePageContent } from '@/hooks/usePageContent';
-import { useServiceCards } from '@/hooks/useServiceCards';
-import { useDepartments } from '@/hooks/useDepartments';
-import { useWhyChooseUs } from '@/hooks/useWhyChooseUs';
-import { MainLayout } from '@/components';
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Check, Shield, Beaker, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import PageTransition from "@/components/PageTransition";
+import HeroShape from "@/components/HeroShape";
+import Footer from "@/components/Footer";
+import { usePageContent } from "@/hooks/usePageContent";
+import { useServiceCards } from "@/hooks/useServiceCards";
+import { useDepartments } from "@/hooks/useDepartments";
+import { useWhyChooseUs } from "@/hooks/useWhyChooseUs";
+import { MainLayout } from "@/components";
 
 const LandingPage = () => {
   const [hoverEyeCare, setHoverEyeCare] = useState(false);
@@ -25,48 +19,50 @@ const LandingPage = () => {
 
   const { departments, departmentServices, isLoading } = useDepartments();
   const eyeCareDept = departments.find((d) =>
-    d.department.toLowerCase().includes('eye')
+    d.department.toLowerCase().includes("eye")
   );
   const gynecologyDept = departments.find((d) =>
-    d.department.toLowerCase().includes('gyn')
+    d.department.toLowerCase().includes("gyn")
   );
   const eyeCareServices =
-    departmentServices[eyeCareDept?.department || 'Eye Care'] || [];
+    departmentServices[eyeCareDept?.department || "Eye Care"] || [];
   const gynecologyServices =
-    departmentServices[gynecologyDept?.department || 'Gynecology'] || [];
+    departmentServices[gynecologyDept?.department || "Gynecology"] || [];
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
     const initializeAOS = async () => {
-      const AOS = (await import('aos')).default;
+      const AOS = (await import("aos")).default;
       AOS.init({
         duration: 800,
         once: true,
-        easing: 'ease-in-out',
+        easing: "ease-in-out",
         mirror: false,
       });
     };
     initializeAOS();
     const scrollTimer = setTimeout(() => {
       if (specialtiesRef.current) {
-        specialtiesRef.current.scrollIntoView({ behavior: 'smooth' });
+        specialtiesRef.current.scrollIntoView({ behavior: "smooth" });
       }
     }, 4000);
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener("resize", checkMobile);
       clearTimeout(scrollTimer);
     };
   }, []);
 
-  const { content, isLoading: contentLoading } = usePageContent('home_hero_section');
-  const defaultHeading = 'Specialized Healthcare for Your Unique Needs';
+  const { content, isLoading: contentLoading } =
+    usePageContent("home_hero_section");
+  const defaultHeading = "Specialized Healthcare for Your Unique Needs";
   const defaultDescription =
     "Experience world-class care in Eye Health and Women's Health with our team of specialists at Eyefem Healthcare.";
-  const { cards: serviceCards, isLoading: serviceCardsLoading } = useServiceCards();
+  const { cards: serviceCards, isLoading: serviceCardsLoading } =
+    useServiceCards();
   const {
     sectionContent: whyChooseUsSection,
     benefitCards,
@@ -163,25 +159,26 @@ const LandingPage = () => {
                   onMouseLeave={() => setHoverEyeCare(false)}
                 >
                   <div
-                    className={`bg-gradient-to-r from-blue-400 to-blue-500 p-6 text-white transition-all duration-300 ${hoverEyeCare ? 'scale-105' : ''
-                      }`}
+                    className={`bg-gradient-to-r from-blue-400 to-blue-500 p-6 text-white transition-all duration-300 ${
+                      hoverEyeCare ? "scale-105" : ""
+                    }`}
                   >
                     <h2 className="text-2xl font-bold">
-                      {eyeCareDept?.department || 'Eye Care'}
+                      {eyeCareDept?.department || "Eye Care"}
                     </h2>
                     <p className="text-white/90">
                       {eyeCareDept?.tagline ||
-                        'Expert treatment for all eye conditions'}
+                        "Expert treatment for all eye conditions"}
                     </p>
                   </div>
 
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-3">
-                      {eyeCareDept?.doctor_name || 'Dr. Sanjeev Lehri'}
+                      {eyeCareDept?.doctor_name || "Dr. Sanjeev Lehri"}
                     </h3>
                     <p className="text-gray-600 mb-6">
                       {eyeCareDept?.doctor_bio ||
-                        'Specialist in treating cataracts, glaucoma, refractive errors, and other eye conditions using the latest technology and techniques.'}
+                        "Specialist in treating cataracts, glaucoma, refractive errors, and other eye conditions using the latest technology and techniques."}
                     </p>
 
                     <div className="space-y-2 mb-6">
@@ -227,14 +224,16 @@ const LandingPage = () => {
                     </div>
 
                     <Link
-                      to={eyeCareDept?.link_url || '/eyecare'}
-                      className={`w-full block text-center py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors group flex items-center justify-center ${hoverEyeCare ? 'bg-blue-600' : ''
-                        }`}
+                      to={eyeCareDept?.link_url || "/eyecare"}
+                      className={`w-full block text-center py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors group flex items-center justify-center ${
+                        hoverEyeCare ? "bg-blue-600" : ""
+                      }`}
                     >
-                      {eyeCareDept?.link_text || 'Visit Eye Care Department'}
+                      {eyeCareDept?.link_text || "Visit Eye Care Department"}
                       <ArrowRight
-                        className={`ml-2 transition-transform duration-300 ${hoverEyeCare ? 'translate-x-1' : ''
-                          }`}
+                        className={`ml-2 transition-transform duration-300 ${
+                          hoverEyeCare ? "translate-x-1" : ""
+                        }`}
                         size={18}
                       />
                     </Link>
@@ -250,11 +249,12 @@ const LandingPage = () => {
                   onMouseLeave={() => setHoverGynecology(false)}
                 >
                   <div
-                    className={`bg-gradient-to-r from-[#D946EF] to-[#d94991] p-6 text-white transition-all duration-300 ${hoverGynecology ? 'scale-105' : ''
-                      }`}
+                    className={`bg-gradient-to-r from-[#D946EF] to-[#d94991] p-6 text-white transition-all duration-300 ${
+                      hoverGynecology ? "scale-105" : ""
+                    }`}
                   >
                     <h2 className="text-2xl font-bold">
-                      {gynecologyDept?.department || 'Gynecology'}
+                      {gynecologyDept?.department || "Gynecology"}
                     </h2>
                     <p className="text-white/90">
                       {gynecologyDept?.tagline ||
@@ -264,11 +264,11 @@ const LandingPage = () => {
 
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-3">
-                      {gynecologyDept?.doctor_name || 'Dr. Nisha Bhatnagar'}
+                      {gynecologyDept?.doctor_name || "Dr. Nisha Bhatnagar"}
                     </h3>
                     <p className="text-gray-600 mb-6">
                       {gynecologyDept?.doctor_bio ||
-                        'Expert in women\'s health, fertility treatments, and IVF with a compassionate approach to address all gynecological concerns.'}
+                        "Expert in women's health, fertility treatments, and IVF with a compassionate approach to address all gynecological concerns."}
                     </p>
 
                     <div className="space-y-2 mb-6">
@@ -294,10 +294,10 @@ const LandingPage = () => {
                       ) : (
                         <>
                           {[
-                            'Fertility Treatments',
-                            'In Vitro Fertilization (IVF)',
+                            "Fertility Treatments",
+                            "In Vitro Fertilization (IVF)",
                             "Women's Health Consultations",
-                            'Reproductive Health Care',
+                            "Reproductive Health Care",
                           ].map((service, index) => (
                             <div
                               key={index}
@@ -312,14 +312,17 @@ const LandingPage = () => {
                     </div>
 
                     <Link
-                      to={gynecologyDept?.link_url || '/gynecology'}
-                      className={`w-full block text-center py-3 px-4 bg-[#d94991] text-white rounded-md hover:bg-[#c73a7c] transition-colors group flex items-center justify-center ${hoverGynecology ? 'bg-[#c73a7c]' : ''
-                        }`}
+                      to={gynecologyDept?.link_url || "/gynecology"}
+                      className={`w-full block text-center py-3 px-4 bg-[#d94991] text-white rounded-md hover:bg-[#c73a7c] transition-colors group flex items-center justify-center ${
+                        hoverGynecology ? "bg-[#c73a7c]" : ""
+                      }`}
                     >
-                      {gynecologyDept?.link_text || 'Visit Gynecology Department'}
+                      {gynecologyDept?.link_text ||
+                        "Visit Gynecology Department"}
                       <ArrowRight
-                        className={`ml-2 transition-transform duration-300 ${hoverGynecology ? 'translate-x-1' : ''
-                          }`}
+                        className={`ml-2 transition-transform duration-300 ${
+                          hoverGynecology ? "translate-x-1" : ""
+                        }`}
                         size={18}
                       />
                     </Link>
@@ -562,7 +565,6 @@ const LandingPage = () => {
           </div>
         </section>
         <Footer />
-        
       </PageTransition>
     </MainLayout>
   );

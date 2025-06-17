@@ -42,34 +42,43 @@ const GynecologyHome = () => {
       return {
         introText: "",
         bulletPoints: [],
-        conclusionText: ""
+        conclusionText: "",
       };
     }
-    
+
     const parts = description.split(/•/g);
     const introText = parts[0].trim();
-    const bulletPoints = parts.slice(1).map(part => part.trim()).filter(part => part);
-    
+    const bulletPoints = parts
+      .slice(1)
+      .map((part) => part.trim())
+      .filter((part) => part);
+
     let conclusionText = "";
     if (bulletPoints.length > 0) {
       const lastItem = bulletPoints[bulletPoints.length - 1];
-      const conclusionSplit = lastItem.split('\n');
+      const conclusionSplit = lastItem.split("\n");
       if (conclusionSplit.length > 1) {
         const lastBullet = conclusionSplit[0];
-        conclusionText = conclusionSplit.slice(1).join('\n').trim();
+        conclusionText = conclusionSplit.slice(1).join("\n").trim();
         bulletPoints[bulletPoints.length - 1] = lastBullet;
       }
     }
-    
+
     return { introText, bulletPoints, conclusionText };
   };
 
-  const { procedure, isLoading: isProcLoading, error: procError } = useGyneAdvancedProcedures();
+  const {
+    procedure,
+    isLoading: isProcLoading,
+    error: procError,
+  } = useGyneAdvancedProcedures();
 
   const procedureData: ProcedureData = procedure || {
     title: "Advanced Procedures",
-    subtitle: "Dr. Bhatnagar specializes in advanced gynecological procedures using cutting-edge technology",
-    description: "Dr. Bhatnagar utilizes the latest technology in gynecology to provide precise diagnoses and effective treatments. Her clinic features state-of-the-art equipment including:\n• 4D Ultrasound imaging for detailed fetal assessment\n• Hysteroscopy for minimally invasive diagnosis and treatment\n• Advanced IVF laboratory equipment\n• Laparoscopic surgery tools for minimally invasive procedures\n• Colposcopy for detailed cervical examination\nThese advanced technologies enable Dr. Bhatnagar to provide the highest standard of care while minimizing discomfort and recovery time for her patients."
+    subtitle:
+      "Dr. Bhatnagar specializes in advanced gynecological procedures using cutting-edge technology",
+    description:
+      "Dr. Bhatnagar utilizes the latest technology in gynecology to provide precise diagnoses and effective treatments. Her clinic features state-of-the-art equipment including:\n• 4D Ultrasound imaging for detailed fetal assessment\n• Hysteroscopy for minimally invasive diagnosis and treatment\n• Advanced IVF laboratory equipment\n• Laparoscopic surgery tools for minimally invasive procedures\n• Colposcopy for detailed cervical examination\nThese advanced technologies enable Dr. Bhatnagar to provide the highest standard of care while minimizing discomfort and recovery time for her patients.",
   };
 
   const formattedProcedure = formatDescription(procedureData.description);
@@ -196,17 +205,17 @@ const GynecologyHome = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                 {isLoading
                   ? // Display loading placeholders
-                  [...Array(6)].map((_, index) => (
-                    <div
-                      key={index}
-                      className="glass-card rounded-xl p-5 sm:p-6 animate-pulse"
-                    >
-                      <div className="h-6 bg-gray-200 rounded mb-3 w-3/4"></div>
-                      <div className="h-16 bg-gray-100 rounded"></div>
-                    </div>
-                  ))
+                    [...Array(6)].map((_, index) => (
+                      <div
+                        key={index}
+                        className="glass-card rounded-xl p-5 sm:p-6 animate-pulse"
+                      >
+                        <div className="h-6 bg-gray-200 rounded mb-3 w-3/4"></div>
+                        <div className="h-16 bg-gray-100 rounded"></div>
+                      </div>
+                    ))
                   : services.length > 0
-                    ? services.map((service, index) => (
+                  ? services.map((service, index) => (
                       <div
                         key={service.id}
                         className="glass-card rounded-xl p-5 sm:p-6 hover:shadow-lg transition-shadow h-full"
@@ -221,7 +230,7 @@ const GynecologyHome = () => {
                         </p>
                       </div>
                     ))
-                    : // Fallback data if no services are available
+                  : // Fallback data if no services are available
                     [
                       {
                         title: "General Gynecology",
@@ -275,13 +284,13 @@ const GynecologyHome = () => {
               </div>
 
               <div className="text-center mt-12" data-aos="fade-up">
-                <Link
+                {/* <Link
                   to="/gynecology/health"
                   className="hidden items-center justify-center text-sm sm:text-base font-medium text-center text-white bg-gynecology hover:bg-gynecology/90 focus:ring-4 focus:outline-none focus:ring-pink-300 rounded-lg px-5 py-2.5 transition-colors duration-200"
                 >
                   Explore all women's health services
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </Link> */}
               </div>
             </div>
           </section>
@@ -300,40 +309,48 @@ const GynecologyHome = () => {
                   defaultValue={treatments[0]?.id || "ivf"}
                   className="w-full"
                 >
-                  <div className="text-center mb-6 sm:mb-8 md:mb-10" data-aos="fade-up">
+                  <div
+                    className="text-center mb-6 sm:mb-8 md:mb-10"
+                    data-aos="fade-up"
+                  >
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-6 text-gynecology">
                       Gynecology Services &amp; Treatments
                     </h2>
                     <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
-                      Comprehensive gynecological and fertility services to help you achieve your health goals.
+                      Comprehensive gynecological and fertility services to help
+                      you achieve your health goals.
                     </p>
                   </div>
                   <div className="flex items-center mb-4 sm:mb-6 md:mb-8 relative overflow-hidden">
                     {/* Mobile scroll indicator */}
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent sm:hidden"></div>
 
-                    <div
-                      className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent mx-auto flex-grow py-2 px-3 sm:px-6 -mx-2 sm:mx-0"
-                    >
+                    <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent mx-auto flex-grow py-2 px-3 sm:px-6 -mx-2 sm:mx-0">
                       <TabsList className="bg-gray-100 flex space-x-1 sm:space-x-2 p-1.5 h-auto w-max min-w-full justify-start sm:justify-center rounded-full shadow-sm">
-                        {treatments.map(treatment => (
+                        {treatments.map((treatment) => (
                           <TabsTrigger
                             key={treatment.id}
                             value={treatment.id}
                             className="px-4 sm:px-5 py-2.5 rounded-full data-[state=active]:bg-gynecology data-[state=active]:text-white data-[state=active]:shadow-md text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gynecology/50 transition-all"
                           >
-                            {treatment.title.split('(')[0].trim()}
+                            {treatment.title.split("(")[0].trim()}
                           </TabsTrigger>
                         ))}
                       </TabsList>
                     </div>
                   </div>
 
-                  {treatments.map(treatment => (
-                    <TabsContent key={treatment.id} value={treatment.id} className="mt-6">
+                  {treatments.map((treatment) => (
+                    <TabsContent
+                      key={treatment.id}
+                      value={treatment.id}
+                      className="mt-6"
+                    >
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                         <div className="order-2 md:order-1">
-                          <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gynecology">{treatment.title}</h2>
+                          <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gynecology">
+                            {treatment.title}
+                          </h2>
                           <p className="text-sm sm:text-base text-gray-700 mb-5">
                             {treatment.description}
                           </p>
@@ -342,7 +359,17 @@ const GynecologyHome = () => {
                             <div className="bg-white rounded-lg p-4 sm:p-6 shadow-md">
                               <div className="flex items-center mb-3">
                                 <div className="flex justify-center items-center w-10 h-10 rounded-full bg-pink-100 text-gynecology mr-3">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
                                     <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
                                     <path d="m9 12 2 2 4-4"></path>
                                   </svg>
@@ -351,25 +378,28 @@ const GynecologyHome = () => {
                                   {treatment.title.includes("IVF")
                                     ? "Our IVF Services Include:"
                                     : treatment.title.includes("IUI")
-                                      ? "When IUI is Recommended:"
-                                      : treatment.title.includes("Hysteroscopy")
-                                        ? "Common Conditions Treated:"
-                                        : treatment.title.includes("Laparoscopic")
-                                          ? "Our Laparoscopic Services:"
-                                          : "We Specialize in Managing:"}
+                                    ? "When IUI is Recommended:"
+                                    : treatment.title.includes("Hysteroscopy")
+                                    ? "Common Conditions Treated:"
+                                    : treatment.title.includes("Laparoscopic")
+                                    ? "Our Laparoscopic Services:"
+                                    : "We Specialize in Managing:"}
                                 </h3>
                               </div>
 
                               <ul className="list-disc pl-5 sm:pl-6 space-y-1 sm:space-y-2 text-gray-700 text-sm sm:text-base">
                                 {treatment.bullet_points.map((point, index) => (
-                                  <li key={index}>{point.replace('• ', '')}</li>
+                                  <li key={index}>{point.replace("• ", "")}</li>
                                 ))}
                               </ul>
                             </div>
                           </div>
 
                           <div className="mt-6">
-                            <Link to="/gynecology/appointment" className="w-full sm:w-auto inline-block">
+                            <Link
+                              to="/gynecology/appointment"
+                              className="w-full sm:w-auto inline-block"
+                            >
                               <Button className="mac-btn gynecology-btn w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3">
                                 {treatment.button_text}
                               </Button>
@@ -383,10 +413,15 @@ const GynecologyHome = () => {
                               <img
                                 alt={`${treatment.title} Treatment`}
                                 className="w-full h-full object-cover"
-                                src={treatment.image_url || getImageForTreatment(treatment.title)}
+                                src={
+                                  treatment.image_url ||
+                                  getImageForTreatment(treatment.title)
+                                }
                                 loading="lazy"
                                 onError={(e) => {
-                                  e.currentTarget.src = getImageForTreatment(treatment.title);
+                                  e.currentTarget.src = getImageForTreatment(
+                                    treatment.title
+                                  );
                                 }}
                               />
                             </div>
@@ -398,12 +433,16 @@ const GynecologyHome = () => {
                 </Tabs>
               ) : (
                 <Tabs defaultValue="ivf" className="w-full">
-                  <div className="text-center mb-6 sm:mb-8 md:mb-10" data-aos="fade-up">
+                  <div
+                    className="text-center mb-6 sm:mb-8 md:mb-10"
+                    data-aos="fade-up"
+                  >
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-6 text-gynecology">
                       Gynecology Services &amp; Treatments
                     </h2>
                     <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
-                      Comprehensive gynecological and fertility services to help you achieve your health goals.
+                      Comprehensive gynecological and fertility services to help
+                      you achieve your health goals.
                     </p>
                   </div>
 
@@ -411,16 +450,14 @@ const GynecologyHome = () => {
                     {/* Mobile scroll indicator */}
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent sm:hidden"></div>
 
-                    <div
-                      className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent mx-auto flex-grow py-2 px-3 sm:px-6 -mx-2 sm:mx-0"
-                    >
+                    <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent mx-auto flex-grow py-2 px-3 sm:px-6 -mx-2 sm:mx-0">
                       <TabsList className="bg-gray-100 flex space-x-1 sm:space-x-2 p-1.5 h-auto w-max min-w-full justify-start sm:justify-center rounded-full shadow-sm">
                         {[
                           { id: "ivf", label: "IVF" },
                           { id: "iui", label: "IUI" },
                           { id: "hysteroscopy", label: "Hysteroscopy" },
                           { id: "laparoscopy", label: "Laparoscopy" },
-                          { id: "pregnancy", label: "Pregnancy" }
+                          { id: "pregnancy", label: "Pregnancy" },
                         ].map((item) => (
                           <TabsTrigger
                             key={item.id}
@@ -452,22 +489,38 @@ const GynecologyHome = () => {
                           </div>
                         </div>
                         <div className="order-2 md:order-1 p-5 sm:p-6 md:p-8">
-                          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-gynecology">In Vitro Fertilization (IVF)</h2>
+                          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-gynecology">
+                            In Vitro Fertilization (IVF)
+                          </h2>
                           <p className="text-sm sm:text-base text-gray-700 mb-5">
-                            IVF is an advanced fertility treatment that helps couples achieve pregnancy
-                            when other methods have been unsuccessful. Our state-of-the-art facility
-                            provides comprehensive IVF care with high success rates.
+                            IVF is an advanced fertility treatment that helps
+                            couples achieve pregnancy when other methods have
+                            been unsuccessful. Our state-of-the-art facility
+                            provides comprehensive IVF care with high success
+                            rates.
                           </p>
 
                           <div className="mb-6">
                             <div className="flex items-center mb-3">
                               <div className="flex justify-center items-center w-8 h-8 rounded-full bg-pink-100 text-gynecology mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
                                   <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
                                   <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                               </div>
-                              <h3 className="text-lg font-semibold text-gynecology">Our IVF Services Include:</h3>
+                              <h3 className="text-lg font-semibold text-gynecology">
+                                Our IVF Services Include:
+                              </h3>
                             </div>
 
                             <ul className="list-disc pl-10 space-y-1 text-gray-700 text-sm sm:text-base">
@@ -482,7 +535,10 @@ const GynecologyHome = () => {
                           </div>
 
                           <div>
-                            <Link to="/gynecology/appointment" className="w-full sm:w-auto inline-block">
+                            <Link
+                              to="/gynecology/appointment"
+                              className="w-full sm:w-auto inline-block"
+                            >
                               <Button className="mac-btn gynecology-btn w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3">
                                 Schedule IVF Consultation
                               </Button>
@@ -492,7 +548,6 @@ const GynecologyHome = () => {
                       </div>
                     </div>
                   </TabsContent>
-
 
                   <TabsContent value="hysteroscopy" className="mt-6 sm:mt-8">
                     <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -512,23 +567,37 @@ const GynecologyHome = () => {
                           </div>
                         </div>
                         <div className="order-2 md:order-1 p-5 sm:p-6 md:p-8">
-                          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-gynecology">Hysteroscopy</h2>
+                          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-gynecology">
+                            Hysteroscopy
+                          </h2>
                           <p className="text-sm sm:text-base text-gray-700 mb-5">
-                            Hysteroscopy is a minimally invasive procedure that allows
-                            direct visualization of the uterine cavity. It's both diagnostic
-                            and therapeutic, enabling us to identify and treat various
-                            uterine conditions.
+                            Hysteroscopy is a minimally invasive procedure that
+                            allows direct visualization of the uterine cavity.
+                            It's both diagnostic and therapeutic, enabling us to
+                            identify and treat various uterine conditions.
                           </p>
 
                           <div className="mb-6">
                             <div className="flex items-center mb-3">
                               <div className="flex justify-center items-center w-8 h-8 rounded-full bg-pink-100 text-gynecology mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
                                   <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
                                   <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                               </div>
-                              <h3 className="text-lg font-semibold text-gynecology">Common Conditions Treated:</h3>
+                              <h3 className="text-lg font-semibold text-gynecology">
+                                Common Conditions Treated:
+                              </h3>
                             </div>
 
                             <ul className="list-disc pl-10 space-y-1 text-gray-700 text-sm sm:text-base">
@@ -542,7 +611,10 @@ const GynecologyHome = () => {
                           </div>
 
                           <div>
-                            <Link to="/gynecology/appointment" className="w-full sm:w-auto inline-block">
+                            <Link
+                              to="/gynecology/appointment"
+                              className="w-full sm:w-auto inline-block"
+                            >
                               <Button className="mac-btn gynecology-btn w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3">
                                 Schedule Consultation
                               </Button>
@@ -571,22 +643,38 @@ const GynecologyHome = () => {
                           </div>
                         </div>
                         <div className="order-2 md:order-1 p-5 sm:p-6 md:p-8">
-                          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-gynecology">Intrauterine Insemination (IUI)</h2>
+                          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-gynecology">
+                            Intrauterine Insemination (IUI)
+                          </h2>
                           <p className="text-sm sm:text-base text-gray-700 mb-5">
-                            IUI is a fertility treatment that involves placing sperm directly into a woman's uterus
-                            to facilitate fertilization. The goal is to increase the number of sperm that reach the
-                            fallopian tubes and subsequently increase the chance of fertilization.
+                            IUI is a fertility treatment that involves placing
+                            sperm directly into a woman's uterus to facilitate
+                            fertilization. The goal is to increase the number of
+                            sperm that reach the fallopian tubes and
+                            subsequently increase the chance of fertilization.
                           </p>
 
                           <div className="mb-6">
                             <div className="flex items-center mb-3">
                               <div className="flex justify-center items-center w-8 h-8 rounded-full bg-pink-100 text-gynecology mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
                                   <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
                                   <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                               </div>
-                              <h3 className="text-lg font-semibold text-gynecology">When IUI is Recommended:</h3>
+                              <h3 className="text-lg font-semibold text-gynecology">
+                                When IUI is Recommended:
+                              </h3>
                             </div>
 
                             <ul className="list-disc pl-10 space-y-1 text-gray-700 text-sm sm:text-base">
@@ -600,7 +688,10 @@ const GynecologyHome = () => {
                           </div>
 
                           <div>
-                            <Link to="/gynecology/appointment" className="w-full sm:w-auto inline-block">
+                            <Link
+                              to="/gynecology/appointment"
+                              className="w-full sm:w-auto inline-block"
+                            >
                               <Button className="mac-btn gynecology-btn w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3">
                                 Schedule IUI Consultation
                               </Button>
@@ -621,7 +712,10 @@ const GynecologyHome = () => {
           {/* Advanced Procedures Section */}
           <section className="py-10 sm:py-12 md:py-16 px-4 bg-gray-50">
             <div className="container mx-auto max-w-6xl">
-              <div className="text-center mb-8 sm:mb-10 md:mb-12" data-aos="fade-up">
+              <div
+                className="text-center mb-8 sm:mb-10 md:mb-12"
+                data-aos="fade-up"
+              >
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 md:mb-6 text-gynecology">
                   {procedureData.title}
                 </h2>
@@ -634,24 +728,36 @@ const GynecologyHome = () => {
                 <div className="flex justify-center items-center py-8 sm:py-10 md:py-12">
                   <div className="flex flex-col items-center">
                     <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 animate-spin text-gynecology" />
-                    <p className="mt-3 sm:mt-4 text-gray-600 font-medium text-sm sm:text-base">Loading advanced procedures...</p>
+                    <p className="mt-3 sm:mt-4 text-gray-600 font-medium text-sm sm:text-base">
+                      Loading advanced procedures...
+                    </p>
                   </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                   <div className="overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                     <img
-                      src={procedure?.image_url || "/eyefemm_pic_uploads/0716c0a3-c007-438d-8ef0-5fbe8d302c42.png"}
+                      src={
+                        procedure?.image_url ||
+                        "/eyefemm_pic_uploads/0716c0a3-c007-438d-8ef0-5fbe8d302c42.png"
+                      }
                       alt="Advanced gynecological procedure"
                       className="w-full h-56 sm:h-64 md:h-72 object-cover transition-transform duration-500 hover:scale-110"
                       loading="lazy"
                       onError={(e) => {
-                        e.currentTarget.src = "/eyefemm_pic_uploads/0716c0a3-c007-438d-8ef0-5fbe8d302c42.png";
+                        e.currentTarget.src =
+                          "/eyefemm_pic_uploads/0716c0a3-c007-438d-8ef0-5fbe8d302c42.png";
                       }}
                     />
                     <div className="p-3 sm:p-4 bg-white">
-                      <h3 className="font-bold text-base sm:text-lg text-gynecology">Dr Nisha Bhatnagar</h3>
-                      <p className="text-gray-600 text-sm sm:text-base"> Uses High-resolution imaging for accurate diagnosis and monitoring</p>
+                      <h3 className="font-bold text-base sm:text-lg text-gynecology">
+                        Dr Nisha Bhatnagar
+                      </h3>
+                      <p className="text-gray-600 text-sm sm:text-base">
+                        {" "}
+                        Uses High-resolution imaging for accurate diagnosis and
+                        monitoring
+                      </p>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 gap-3 sm:gap-4">
@@ -661,13 +767,16 @@ const GynecologyHome = () => {
                       </p>
                     )}
 
-                    {formattedProcedure.bulletPoints && formattedProcedure.bulletPoints.length > 0 && (
-                      <ul className="list-disc pl-4 sm:pl-5 space-y-1 sm:space-y-2 text-gray-700 text-sm sm:text-base">
-                        {formattedProcedure.bulletPoints.map((point, index) => (
-                          <li key={index}>{point}</li>
-                        ))}
-                      </ul>
-                    )}
+                    {formattedProcedure.bulletPoints &&
+                      formattedProcedure.bulletPoints.length > 0 && (
+                        <ul className="list-disc pl-4 sm:pl-5 space-y-1 sm:space-y-2 text-gray-700 text-sm sm:text-base">
+                          {formattedProcedure.bulletPoints.map(
+                            (point, index) => (
+                              <li key={index}>{point}</li>
+                            )
+                          )}
+                        </ul>
+                      )}
 
                     {formattedProcedure.conclusionText && (
                       <p className="text-base sm:text-lg text-gray-700">
@@ -679,17 +788,16 @@ const GynecologyHome = () => {
               )}
             </div>
             <div className="text-center mt-8 sm:mt-12" data-aos="fade-up">
-                <Link
-                  to="/gynecology/doctor"
-                  className="w-full sm:w-auto inline-block"
-                >
-                  <Button className="mac-btn gynecology-btn w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3">
-                    Learn More About Dr. Bhatnagar
-                  </Button>
-                </Link>
-              </div>
+              <Link
+                to="/gynecology/doctor"
+                className="w-full sm:w-auto inline-block"
+              >
+                <Button className="mac-btn gynecology-btn w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3">
+                  Learn More About Dr. Bhatnagar
+                </Button>
+              </Link>
+            </div>
           </section>
-
 
           {/* Fertility Section */}
           {/* <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
@@ -783,7 +891,7 @@ const GynecologyHome = () => {
           </section> */}
 
           {/* Why Choose Us Section */}
-        { /*  <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gray-50">
+          {/*  <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gray-50">
             <div className="container mx-auto max-w-6xl">
               <div
                 className="text-center mb-10 sm:mb-12 md:mb-16"

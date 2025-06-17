@@ -36,25 +36,24 @@ const MainNavbar = () => {
   ];
 
   // Filter out links that should be hidden on current page
-  const visibleLinks = navLinks.filter(link => link.hideOn !== location.pathname);
+  const visibleLinks = navLinks.filter(
+    (link) => link.hideOn !== location.pathname
+  );
 
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 bg-white py-3 transition-all duration-300 ${
-        isScrolled ? 'shadow-md' : 'shadow-sm'
+        isScrolled ? "shadow-md" : "shadow-sm"
       }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <Link
-            to="/"
-            className="flex items-center"
-          >
-            <div className="h-12 w-auto flex items-center">
-              <img 
+          <Link to="/" className="flex items-center">
+            <div className="h-16 w-auto flex items-center">
+              <img
                 src="/eyefemm_pic_uploads/6c43213d-6d60-4790-b8ff-d662e634ee59.png"
                 alt="EyeFem Clinic"
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </div>
           </Link>
@@ -80,7 +79,7 @@ const MainNavbar = () => {
           <button
             onClick={toggleMenu}
             className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -112,4 +111,4 @@ const MainNavbar = () => {
   );
 };
 
-export default MainNavbar; 
+export default MainNavbar;

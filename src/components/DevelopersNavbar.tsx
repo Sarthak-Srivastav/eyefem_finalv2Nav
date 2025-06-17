@@ -14,8 +14,8 @@ const DevelopersNavbar = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [scrolled]);
 
   const closeMobileMenu = () => {
@@ -23,19 +23,19 @@ const DevelopersNavbar = () => {
   };
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 w-full z-50 bg-white py-3 ${
-        scrolled ? 'shadow-md' : 'shadow-sm'
+        scrolled ? "shadow-md" : "shadow-sm"
       }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <div className="h-12 w-auto flex items-center">
+            <div className="h-16 w-auto flex items-center">
               <img
                 src="/eyefemm_pic_uploads/6c43213d-6d60-4790-b8ff-d662e634ee59.png"
                 alt="EyeFem Clinic"
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </div>
           </Link>
@@ -44,7 +44,7 @@ const DevelopersNavbar = () => {
           <button
             className="md:hidden p-2 rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {mobileMenuOpen ? (
               <X className="h-6 w-6" />
@@ -88,48 +88,48 @@ const DevelopersNavbar = () => {
           </nav>
         </div>
 
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t">
             <div className="container mx-auto px-4 py-4 space-y-4">
-                <Link
-                  to="/eyecare"
+              <Link
+                to="/eyecare"
                 className="block py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-50 transition-colors"
-                  onClick={closeMobileMenu}
-                >
-                  Eye Care
-                </Link>
-                <Link
-                  to="/gynecology"
+                onClick={closeMobileMenu}
+              >
+                Eye Care
+              </Link>
+              <Link
+                to="/gynecology"
                 className="block py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-50 transition-colors"
-                  onClick={closeMobileMenu}
-                >
-                  Gynecology
-                </Link>
-                <Link
-                  to="/gynecology/doctor"
+                onClick={closeMobileMenu}
+              >
+                Gynecology
+              </Link>
+              <Link
+                to="/gynecology/doctor"
                 className="block py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-50 transition-colors"
-                  onClick={closeMobileMenu}
-                >
-                  Dr. Nisha Bhatnagar
-                </Link>
-                <Link
-                  to="/eyecare/doctor"
+                onClick={closeMobileMenu}
+              >
+                Dr. Nisha Bhatnagar
+              </Link>
+              <Link
+                to="/eyecare/doctor"
                 className="block py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-50 transition-colors"
-                  onClick={closeMobileMenu}
-                >
-                  Dr. Sanjeev Lehri
-                </Link>
-                <Link
-                  to="/gallery"
+                onClick={closeMobileMenu}
+              >
+                Dr. Sanjeev Lehri
+              </Link>
+              <Link
+                to="/gallery"
                 className="block py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-50 transition-colors"
-                  onClick={closeMobileMenu}
-                >
-                  Gallery
-                </Link>
-              </div>
+                onClick={closeMobileMenu}
+              >
+                Gallery
+              </Link>
             </div>
-          )}
+          </div>
+        )}
       </div>
     </header>
   );

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -36,11 +36,11 @@ import ResetPassword from "@/pages/admin/ResetPassword";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Lazy-loaded pages to improve initial load time
-const AdminDashboard = lazy(() => import('@/pages/admin/Dashboard'));
-const ExportData = lazy(() => import('@/pages/admin/ExportData'));
+const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
+const ExportData = lazy(() => import("@/pages/admin/ExportData"));
 
 // Auth Provider
-import { AuthProvider } from '@/hooks/useAuth';
+import { AuthProvider } from "@/hooks/useAuth";
 import EditContent from "./pages/admin/EditContent";
 
 // Initialize AOS
@@ -56,21 +56,21 @@ const SmoothScroll = () => {
   useEffect(() => {
     // Apply smooth scrolling to all anchor links
     const cleanup = initSmoothScrolling();
-    
+
     // Re-apply when route changes
     const handleRouteChange = () => {
       requestAnimationFrame(() => {
         initSmoothScrolling();
       });
     };
-    
-    window.addEventListener('popstate', handleRouteChange);
+
+    window.addEventListener("popstate", handleRouteChange);
     return () => {
       cleanup();
-      window.removeEventListener('popstate', handleRouteChange);
+      window.removeEventListener("popstate", handleRouteChange);
     };
   }, []);
-  
+
   return null;
 };
 
@@ -93,41 +93,71 @@ function App() {
 
           {/* EyeCare routes */}
           <Route path="/eyecare" element={<EyeCareHome />} />
-          <Route path="/eyecare/conditions" element={<EyeCareConditions />} />
+          {/* <Route path="/eyecare/conditions" element={<EyeCareConditions />} /> */}
           <Route path="/eyecare/doctor" element={<EyeCareDoctor />} />
           <Route path="/eyecare/appointment" element={<EyeCareAppointment />} />
 
           {/* Gynecology routes */}
           <Route path="/gynecology" element={<GynecologyHome />} />
-          <Route path="/gynecology/health" element={<GynecologyHealth />} />
+          {/* <Route path="/gynecology/health" element={<GynecologyHealth />} /> */}
           <Route path="/gynecology/doctor" element={<GynecologyDoctor />} />
-          <Route path="/gynecology/appointment" element={<GynecologyAppointment />} />
-          
+          <Route
+            path="/gynecology/appointment"
+            element={<GynecologyAppointment />}
+          />
+
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/forgot-password" element={<ForgotPassword />} />
           <Route path="/admin/reset-password" element={<ResetPassword />} />
-          <Route path="/admin/dashboard" element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            </Suspense>
-          } />
-          <Route path="/admin/export-data" element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-              <ProtectedRoute>
-                <ExportData />
-              </ProtectedRoute>
-            </Suspense>
-          } />
-          <Route path="/admin/edit-content" element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-              <ProtectedRoute>
-                <EditContent />
-              </ProtectedRoute>
-            </Suspense>
-          } />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center min-h-screen">
+                    Loading...
+                  </div>
+                }
+              >
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/admin/export-data"
+            element={
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center min-h-screen">
+                    Loading...
+                  </div>
+                }
+              >
+                <ProtectedRoute>
+                  <ExportData />
+                </ProtectedRoute>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/admin/edit-content"
+            element={
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center min-h-screen">
+                    Loading...
+                  </div>
+                }
+              >
+                <ProtectedRoute>
+                  <EditContent />
+                </ProtectedRoute>
+              </Suspense>
+            }
+          />
           {/* 404 route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
